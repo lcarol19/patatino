@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% block title %}{{ animal.nome }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="Caminho de navegação">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ url_for('animal.home') }}">Início</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{ animal.nome }}
+            </li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+
+        <!-- Carrossel de fotos -->
+        <div class="col-lg-6">
+            {% if animal.fotos %}
+            <div id="carrossel-{{ animal.id_animal }}"
+                 class="carousel slide carousel-animal"
+                 role="region"
+                 aria-label="Fotos de {{ animal.nome }}"
+                 aria-roledescription="carrossel">
+
+                <!-- Indicadores -->
+                {% if animal.fotos|length > 1 %}
+                <div class="carousel-indicators">
+                    {% for foto in animal.fotos %}
+                    <button type="button"
+                            data-bs-target="#carrossel-{{ animal.id_animal }}"
+                            data-bs-slide-to="{{ loop.index0 }}"
+                            {% if loop.first %}class="active" aria-current="true"{% endif %}
+                            aria-label="Foto {{ loop.index }} de {{ animal.nome }}">
+                    </button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Fotos -->
+                <div class="carousel-inner rounded">
+                    {% for foto in animal.fotos %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <img src="{{ foto.url_foto }}"
+                             class="d-block w-100"
+                             alt="Foto {{ loop.index }} de {{ animal.nome }} — {{ animal.especie }} de porte {{ animal.porte }}"
+                             loading="{% if loop.first %}eager{% else %}lazy{% endif %}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Controles (só exibe se tiver mais de 1 foto) -->
+                {% if animal.fotos|length > 1 %}
+                <button class="carousel-control-prev" type="button"
+                        data-bs-target="#carrossel-{{ animal.id_animal }}"
+                        data-bs-slide="prev"
+                        aria-label="Foto anterior">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button"
+                        data-bs-target="#carrossel-{{ animal.id_animal }}"
+                        data-bs-slide="next"
+                        aria-label="Próxima foto">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+                {% endif %}
+
+            </div>
+            {% else %}
+            <!-- Sem foto -->
+            <div class="card-img-placeholder rounded"
+                 style="height:320px;font-size:5rem;"
+                 role="img"
+                 aria-label="{{ animal.nome }} sem foto disponível">
+                {% if animal.especie == 'Gato' %}🐱{% else %}🐶{% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Informações -->
+        <div class="col-lg-6">
+            <div class="detalhe-info h-100">
+
+                <!-- Nome e badges -->
+                <div class="d-flex flex-wrap align-items-start gap-2 mb-3">
+                    <h1 class="h2 fw-bold mb-0">{{ animal.nome }}</h1>
+                    <span class="badge rounded-pill"
+                          style="background:var(--cafofe-laranja);color:#fff;">
+                        {{ animal.especie }}
+                    </span>
+                    <span class="badge rounded-pill bg-secondary">
+                        {{ animal.porte }}
+                    </span>
+                    {% if animal.status == 'Para adoção' %}
+                    <span class="badge rounded-pill bg-success">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Disponível
+                    </span>
+                    {% else %}
+                    <span class="badge rounded-pill bg-warning text-dark">
+                        {{ animal.status }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Dados -->
+                <ul class="list-unstyled mb-3">
+                    <li class="info-item">
+                        <i class="fa-solid fa-venus-mars" aria-hidden="true"></i>
+                        <span><strong>Sexo:</strong> {{ animal.sexo }}</span>
+                    </li>
+                    <li class="info-item">
+                        <i class="fa-solid fa-cake-candles" aria-hidden="true"></i>
+                        <span><strong>Idade:</strong> {{ animal.idade_legivel }}</span>
+                    </li>
+                    {% if animal.codigo_chip %}
+                    <li class="info-item">
+                        <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+                        <span><strong>Chip:</strong> {{ animal.codigo_chip }}</span>
+                    </li>
+                    {% endif %}
+                    {% if animal.temperamento %}
+                    <li class="info-item">
+                        <i class="fa-solid fa-star" aria-hidden="true"></i>
+                        <span><strong>Temperamento:</strong> {{ animal.temperamento }}</span>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <!-- Descrição -->
+                {% if animal.descricao %}
+                <p class="mb-3">{{ animal.descricao }}</p>
+                {% endif %}
+
+                <!-- Observações -->
+                {% if animal.observacoes %}
+                <div class="alert alert-warning py-2" role="note">
+                    <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                    <strong>Observações:</strong> {{ animal.observacoes }}
+                </div>
+                {% endif %}
+
+                <!-- Botões de ação -->
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    {% if animal.status == 'Para adoção' %}
+                    <a href="{{ url_for('adocao.adotar', id_animal=animal.id_animal) }}"
+                       class="btn btn-cafofe btn-lg">
+                        <i class="fa-solid fa-heart" aria-hidden="true"></i>
+                        Quero adotar!
+                    </a>
+                    {% endif %}
+                    <a href="{{ url_for('animal.editar', id_animal=animal.id_animal) }}"
+                       class="btn btn-cafofe-outline">
+                        <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        Editar
+                    </a>
+                    <!-- Excluir — confirma via modal -->
+                    <button type="button"
+                            class="btn btn-outline-danger"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalExcluir"
+                            aria-haspopup="dialog">
+                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                        Excluir
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Pré-requisitos de adoção -->
+    {% if animal.status == 'Para adoção' %}
+    <section class="mt-4" aria-labelledby="prereq-titulo">
+        <h2 id="prereq-titulo" class="section-title">
+            Pré-requisitos para adoção responsável
+        </h2>
+        <div class="row g-3">
+            {% set requisitos = [
+                ('fa-calendar', 'Ter mais de 21 anos'),
+                ('fa-house', 'Residência adaptada para receber o animal, evitando fugas ou acidentes'),
+                ('fa-shield-heart', 'Ter condições de proporcionar conforto, saúde e bem-estar'),
+                ('fa-clock', 'Ter tempo para passeios e brincadeiras'),
+                ('fa-brain', 'Ser paciente e compreensivo no período de adaptação'),
+                ('fa-shield-cat', 'Para gatos: tela de proteção nas janelas é essencial'),
+            ] %}
+            {% for icone, texto in requisitos %}
+            <div class="col-md-6">
+                <div class="d-flex align-items-start gap-2">
+                    <i class="fa-solid {{ icone }} text-cafofe mt-1" aria-hidden="true"></i>
+                    <span>{{ texto }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+</div>
+
+<!-- Modal de confirmação de exclusão -->
+<div class="modal fade" id="modalExcluir" tabindex="-1"
+     aria-labelledby="modalExcluirTitulo" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title h5" id="modalExcluirTitulo">
+                    <i class="fa-solid fa-triangle-exclamation text-danger" aria-hidden="true"></i>
+                    Confirmar exclusão
+                </h3>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir <strong>{{ animal.nome }}</strong>?
+                Essa ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">Cancelar</button>
+                <form action="{{ url_for('animal.excluir', id_animal=animal.id_animal) }}"
+                      method="post">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                        Sim, excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

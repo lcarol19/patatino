@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% block title %}Cadastrar Animal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <nav aria-label="Caminho de navegação">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('animal.home') }}">Início</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Cadastrar Animal</li>
+        </ol>
+    </nav>
+
+    <h1 class="section-title">
+        <i class="fa-solid fa-paw text-cafofe" aria-hidden="true"></i>
+        Acolhimento — Cadastrar Animal
+    </h1>
+
+    <form method="post"
+          action="{{ url_for('animal.cadastrar') }}"
+          enctype="multipart/form-data"
+          novalidate
+          class="needs-validation"
+          aria-label="Formulário de cadastro de animal">
+
+        <div class="form-section mb-4">
+            <h2 class="h5 mb-3 fw-bold">Dados do animal</h2>
+            <div class="row g-3">
+
+                <!-- Nome -->
+                <div class="col-md-6">
+                    <label for="nome" class="form-label">Nome *</label>
+                    <input type="text" id="nome" name="nome"
+                           class="form-control" required
+                           placeholder="Ex: Bolinha"
+                           aria-describedby="nome-hint"
+                           aria-required="true">
+                    <div id="nome-hint" class="form-text">Nome pelo qual o animal é conhecido.</div>
+                    <div class="invalid-feedback">O nome é obrigatório.</div>
+                </div>
+
+                <!-- Espécie -->
+                <div class="col-md-3">
+                    <label for="especie" class="form-label">Espécie *</label>
+                    <select id="especie" name="especie" class="form-select"
+                            required aria-required="true">
+                        <option value="">Selecione…</option>
+                        <option value="Cachorro">🐶 Cachorro</option>
+                        <option value="Gato">🐱 Gato</option>
+                        <option value="Outro">🐾 Outro</option>
+                    </select>
+                    <div class="invalid-feedback">Selecione a espécie.</div>
+                </div>
+
+                <!-- Porte -->
+                <div class="col-md-3">
+                    <label for="porte" class="form-label">Porte *</label>
+                    <select id="porte" name="porte" class="form-select"
+                            required aria-required="true">
+                        <option value="">Selecione…</option>
+                        <option value="Pequeno">Pequeno</option>
+                        <option value="Médio">Médio</option>
+                        <option value="Grande">Grande</option>
+                    </select>
+                    <div class="invalid-feedback">Selecione o porte.</div>
+                </div>
+
+                <!-- Sexo -->
+                <div class="col-md-3">
+                    <label for="sexo" class="form-label">Sexo *</label>
+                    <select id="sexo" name="sexo" class="form-select"
+                            required aria-required="true">
+                        <option value="">Selecione…</option>
+                        <option value="Macho">Macho</option>
+                        <option value="Fêmea">Fêmea</option>
+                        <option value="Não informado">Não informado</option>
+                    </select>
+                    <div class="invalid-feedback">Selecione o sexo.</div>
+                </div>
+
+                <!-- Idade -->
+                <div class="col-md-3">
+                    <label for="idade_aproximada" class="form-label">
+                        Idade aproximada
+                    </label>
+                    <div class="input-group">
+                        <input type="number" id="idade_aproximada"
+                               name="idade_aproximada"
+                               class="form-control"
+                               min="0" max="300"
+                               placeholder="Ex: 6"
+                               aria-describedby="idade-hint">
+                        <span class="input-group-text">meses</span>
+                    </div>
+                    <div id="idade-hint" class="form-text">Deixe em branco se desconhecida.</div>
+                </div>
+
+                <!-- Chip -->
+                <div class="col-md-6">
+                    <label for="codigo_chip" class="form-label">Código do chip</label>
+                    <input type="text" id="codigo_chip" name="codigo_chip"
+                           class="form-control" maxlength="50"
+                           placeholder="Ex: 958000012345678">
+                </div>
+
+                <!-- Temperamento -->
+                <div class="col-12">
+                    <label for="temperamento" class="form-label">Temperamento</label>
+                    <input type="text" id="temperamento" name="temperamento"
+                           class="form-control" maxlength="255"
+                           placeholder="Ex: Dócil, brincalhão, sociável com outros animais"
+                           aria-describedby="temp-hint">
+                    <div id="temp-hint" class="form-text">
+                        Palavras-chave separadas por vírgula.
+                    </div>
+                </div>
+
+                <!-- Descrição -->
+                <div class="col-12">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea id="descricao" name="descricao"
+                              class="form-control" rows="3"
+                              placeholder="Conte a história do animal, como foi resgatado…"></textarea>
+                </div>
+
+                <!-- Observações -->
+                <div class="col-12">
+                    <label for="observacoes" class="form-label">Observações</label>
+                    <textarea id="observacoes" name="observacoes"
+                              class="form-control" rows="2"
+                              placeholder="Necessidades especiais, restrições, cuidados…"></textarea>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Fotos -->
+        <div class="form-section mb-4">
+            <h2 class="h5 mb-1 fw-bold">
+                <i class="fa-solid fa-camera text-cafofe" aria-hidden="true"></i>
+                Fotos (até 3)
+            </h2>
+            <p class="text-muted small mb-3">
+                Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 8 MB cada.
+            </p>
+
+            <label for="fotos_animal" class="form-label visually-hidden">
+                Selecionar fotos do animal
+            </label>
+            <input class="form-control" type="file"
+                   id="fotos_animal" name="fotos_animal"
+                   multiple accept="image/*"
+                   aria-describedby="fotos-hint">
+            <div id="fotos-hint" class="form-text">
+                Selecione até 3 fotos. A primeira será a foto principal no catálogo.
+            </div>
+
+            <!-- Preview das fotos selecionadas -->
+            <div id="preview-fotos" class="row g-2 mt-2" aria-live="polite" aria-label="Pré-visualização das fotos"></div>
+        </div>
+
+        <!-- Botões -->
+        <div class="d-flex gap-2 flex-wrap">
+            <button type="submit" class="btn btn-cafofe btn-lg">
+                <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+                Cadastrar animal
+            </button>
+            <a href="{{ url_for('animal.home') }}" class="btn btn-outline-secondary btn-lg">
+                Cancelar
+            </a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/mascaras.js') }}"></script>
+<script src="{{ url_for('static', filename='js/fotos_preview.js') }}"></script>
+<script>
+// Validação Bootstrap 5
+(function () {
+    'use strict';
+    document.querySelectorAll('.needs-validation').forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                // Foco no primeiro campo inválido (acessibilidade)
+                form.querySelector(':invalid').focus();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+{% endblock %}

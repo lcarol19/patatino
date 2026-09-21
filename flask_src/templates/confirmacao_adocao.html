@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Solicitação enviada!{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="confirmacao-box"
+                 role="status"
+                 aria-live="polite"
+                 aria-label="Solicitação de adoção enviada com sucesso">
+
+                <div class="icone-sucesso mb-3" aria-hidden="true">🐾</div>
+
+                <h1 class="h3 fw-bold mb-2">Solicitação enviada!</h1>
+
+                <p class="text-muted mb-4">
+                    Olá, <strong>{{ adocao.nome_tutor }}</strong>!<br>
+                    Sua solicitação para adotar
+                    <strong>{{ adocao.nome_animal }}</strong>
+                    foi recebida com sucesso.<br>
+                    A Cafofe entrará em contato em breve.
+                </p>
+
+                <div class="alert alert-success text-start" role="note">
+                    <ul class="mb-0">
+                        <li>
+                            <strong>Protocolo:</strong>
+                            #{{ '%05d' % adocao.id_adocao }}
+                        </li>
+                        <li>
+                            <strong>Animal:</strong>
+                            {{ adocao.nome_animal }} ({{ adocao.especie }})
+                        </li>
+                        <li>
+                            <strong>Data:</strong>
+                            {{ adocao.data_interesse.strftime('%d/%m/%Y às %H:%M') if adocao.data_interesse else '—' }}
+                        </li>
+                        <li>
+                            <strong>Status:</strong> Em análise
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
+                    <a href="{{ url_for('adocao.termo_pdf', id_adocao=adocao.id_adocao) }}"
+                       class="btn btn-cafofe"
+                       aria-label="Baixar termo de responsabilidade em PDF">
+                        <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                        Baixar Termo de Responsabilidade
+                    </a>
+                    <a href="{{ url_for('animal.home') }}"
+                       class="btn btn-cafofe-outline">
+                        <i class="fa-solid fa-paw" aria-hidden="true"></i>
+                        Ver outros animais
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

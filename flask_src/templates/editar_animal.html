@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% block title %}Editar {{ animal.nome }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <nav aria-label="Caminho de navegação">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('animal.home') }}">Início</a></li>
+            <li class="breadcrumb-item">
+                <a href="{{ url_for('animal.detalhe', id_animal=animal.id_animal) }}">{{ animal.nome }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Editar</li>
+        </ol>
+    </nav>
+
+    <h1 class="section-title">
+        <i class="fa-solid fa-pen text-cafofe" aria-hidden="true"></i>
+        Editar — {{ animal.nome }}
+    </h1>
+
+    <form method="post"
+          action="{{ url_for('animal.editar', id_animal=animal.id_animal) }}"
+          enctype="multipart/form-data"
+          novalidate
+          class="needs-validation"
+          aria-label="Formulário de edição de animal">
+
+        <div class="form-section mb-4">
+            <h2 class="h5 mb-3 fw-bold">Dados do animal</h2>
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label for="nome" class="form-label">Nome *</label>
+                    <input type="text" id="nome" name="nome"
+                           class="form-control" required
+                           value="{{ animal.nome }}"
+                           aria-required="true">
+                    <div class="invalid-feedback">O nome é obrigatório.</div>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="especie" class="form-label">Espécie *</label>
+                    <select id="especie" name="especie" class="form-select" required>
+                        {% for op in ['Cachorro','Gato','Outro'] %}
+                        <option value="{{ op }}" {% if animal.especie == op %}selected{% endif %}>
+                            {{ op }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="porte" class="form-label">Porte *</label>
+                    <select id="porte" name="porte" class="form-select" required>
+                        {% for op in ['Pequeno','Médio','Grande'] %}
+                        <option value="{{ op }}" {% if animal.porte == op %}selected{% endif %}>
+                            {{ op }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="sexo" class="form-label">Sexo *</label>
+                    <select id="sexo" name="sexo" class="form-select" required>
+                        {% for op in ['Macho','Fêmea','Não informado'] %}
+                        <option value="{{ op }}" {% if animal.sexo == op %}selected{% endif %}>
+                            {{ op }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Status *</label>
+                    <select id="status" name="status" class="form-select" required>
+                        {% for op in ['Para adoção','Adotado','Em tratamento','Óbito'] %}
+                        <option value="{{ op }}" {% if animal.status == op %}selected{% endif %}>
+                            {{ op }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="idade_aproximada" class="form-label">Idade (meses)</label>
+                    <input type="number" id="idade_aproximada" name="idade_aproximada"
+                           class="form-control" min="0" max="300"
+                           value="{{ animal.idade_aproximada or '' }}">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="codigo_chip" class="form-label">Código do chip</label>
+                    <input type="text" id="codigo_chip" name="codigo_chip"
+                           class="form-control" maxlength="50"
+                           value="{{ animal.codigo_chip or '' }}">
+                </div>
+
+                <div class="col-12">
+                    <label for="temperamento" class="form-label">Temperamento</label>
+                    <input type="text" id="temperamento" name="temperamento"
+                           class="form-control" maxlength="255"
+                           value="{{ animal.temperamento or '' }}">
+                </div>
+
+                <div class="col-12">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea id="descricao" name="descricao"
+                              class="form-control" rows="3">{{ animal.descricao or '' }}</textarea>
+                </div>
+
+                <div class="col-12">
+                    <label for="observacoes" class="form-label">Observações</label>
+                    <textarea id="observacoes" name="observacoes"
+                              class="form-control" rows="2">{{ animal.observacoes or '' }}</textarea>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Fotos atuais -->
+        {% if animal.fotos %}
+        <div class="form-section mb-4">
+            <h2 class="h5 fw-bold mb-3">
+                <i class="fa-solid fa-images text-cafofe" aria-hidden="true"></i>
+                Fotos atuais
+            </h2>
+            <div class="row g-2" id="fotos-atuais">
+                {% for foto in animal.fotos %}
+                <div class="col-4 col-md-3 position-relative" id="foto-{{ foto.id_foto }}">
+                    <img src="{{ foto.url_foto }}"
+                         class="foto-preview"
+                         alt="Foto {{ loop.index }} de {{ animal.nome }}">
+                    <button type="button"
+                            class="foto-remove-btn"
+                            aria-label="Marcar foto {{ loop.index }} para remoção"
+                            onclick="marcarRemocao({{ foto.id_foto }}, this)">
+                        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                    </button>
+                    {% if loop.first %}
+                    <span class="badge bg-success position-absolute bottom-0 start-0 m-1">
+                        Principal
+                    </span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <div id="inputs-remocao"></div>
+        </div>
+        {% endif %}
+
+        <!-- Novas fotos -->
+        <div class="form-section mb-4">
+            <h2 class="h5 fw-bold mb-3">
+                <i class="fa-solid fa-camera text-cafofe" aria-hidden="true"></i>
+                Adicionar novas fotos
+            </h2>
+            <p class="text-muted small">
+                Serão aceitas até {{ 3 - animal.fotos|length }} foto(s) nova(s).
+            </p>
+            <input class="form-control" type="file"
+                   id="fotos_animal" name="fotos_animal"
+                   multiple accept="image/*">
+            <div id="preview-fotos" class="row g-2 mt-2" aria-live="polite"></div>
+        </div>
+
+        <!-- Botões -->
+        <div class="d-flex gap-2 flex-wrap">
+            <button type="submit" class="btn btn-cafofe btn-lg">
+                <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+                Salvar alterações
+            </button>
+            <a href="{{ url_for('animal.detalhe', id_animal=animal.id_animal) }}"
+               class="btn btn-outline-secondary btn-lg">
+                Cancelar
+            </a>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/fotos_preview.js') }}"></script>
+<script>
+// Marca foto existente para remoção
+function marcarRemocao(idFoto, btn) {
+    const div = document.getElementById('foto-' + idFoto);
+    div.style.opacity = '0.3';
+    btn.disabled = true;
+    btn.setAttribute('aria-label', 'Foto marcada para remoção');
+
+    const input = document.createElement('input');
+    input.type  = 'hidden';
+    input.name  = 'fotos_remover';
+    input.value = idFoto;
+    document.getElementById('inputs-remocao').appendChild(input);
+}
+
+// Validação Bootstrap
+(function () {
+    'use strict';
+    document.querySelectorAll('.needs-validation').forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                form.querySelector(':invalid').focus();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+{% endblock %}

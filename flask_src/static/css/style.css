@@ -1,0 +1,343 @@
+/* ============================================================
+   PATATINO × Cafofe — Estilo principal
+   Mobile-first | WCAG 2.1 AA | Inspirado em cafofe.org
+   ============================================================ */
+
+/* ── Variáveis ──────────────────────────────────────────────── */
+:root {
+    --laranja:     #f28b00;
+    --laranja-dk:  #d47800;
+    --verde:       #4caf50;
+    --escuro:      #1a1a1a;
+    --cinza-bg:    #f5f5f5;
+    --cinza-card:  #ffffff;
+    --texto:       #333333;
+    --texto-sec:   #666666;
+    --radius:      8px;
+    --shadow:      0 2px 8px rgba(0,0,0,.12);
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 16px;
+    color: var(--texto);
+    background: var(--cinza-bg);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ── Skip link (acessibilidade) ─────────────────────────────── */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    background: var(--laranja);
+    color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 0 0 var(--radius) var(--radius);
+    font-weight: 700;
+    z-index: 9999;
+    text-decoration: none;
+    transition: top .2s;
+}
+.skip-link:focus { top: 0; }
+
+/* ── Foco visível (acessibilidade) ──────────────────────────── */
+:focus-visible {
+    outline: 3px solid var(--laranja);
+    outline-offset: 2px;
+}
+
+/* ── Reduced motion (acessibilidade) ────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+/* ── Header top ─────────────────────────────────────────────── */
+.header-top {
+    background: var(--escuro);
+    padding: .35rem 0;
+    font-size: .85rem;
+}
+.header-top a {
+    color: #ccc;
+    text-decoration: none;
+}
+.header-top a:hover { color: var(--laranja); }
+
+/* ── Navbar ─────────────────────────────────────────────────── */
+.cafofe-navbar {
+    background: #fff;
+    border-bottom: 3px solid var(--laranja);
+    padding: .5rem 0;
+}
+.cafofe-navbar .navbar-brand img {
+    height: 52px;
+    width: auto;
+}
+.cafofe-navbar .nav-link {
+    color: var(--escuro) !important;
+    font-weight: 600;
+    padding: .4rem .75rem;
+    border-radius: var(--radius);
+    transition: background .15s, color .15s;
+}
+.cafofe-navbar .nav-link:hover,
+.cafofe-navbar .nav-link.active {
+    color: var(--laranja) !important;
+    background: rgba(242,139,0,.08);
+}
+.cafofe-navbar .nav-link.active { border-bottom: 2px solid var(--laranja); }
+
+/* ── Botões ─────────────────────────────────────────────────── */
+.btn-cafofe {
+    background: var(--laranja);
+    color: #fff !important;
+    border: 2px solid var(--laranja);
+    border-radius: 2rem;
+    padding: .45rem 1.4rem;
+    font-weight: 700;
+    min-height: 44px;
+    transition: background .15s;
+}
+.btn-cafofe:hover, .btn-cafofe:focus {
+    background: var(--laranja-dk);
+    border-color: var(--laranja-dk);
+}
+.btn-cafofe-outline {
+    background: transparent;
+    color: var(--laranja) !important;
+    border: 2px solid var(--laranja);
+    border-radius: 2rem;
+    padding: .45rem 1.4rem;
+    font-weight: 700;
+    min-height: 44px;
+    transition: all .15s;
+}
+.btn-cafofe-outline:hover, .btn-cafofe-outline:focus {
+    background: var(--laranja);
+    color: #fff !important;
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+/* Degradê fiel ao site cafofe.org: vermelho-laranja escuro → laranja claro */
+.hero {
+    background: linear-gradient(to right, #c13a00 0%, #d94f00 30%, #e86000 60%, #f28b00 85%, #f5a030 100%);
+    color: #fff;
+    padding: 2.5rem 0;
+    text-align: center;
+}
+.hero h1 {
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin-bottom: .5rem;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+.hero h1 span { color: #fff3c0; }
+.hero p { color: rgba(255,255,255,.92); font-size: 1.05rem; max-width: 560px; margin: 0 auto 1.25rem; text-shadow: 0 1px 3px rgba(0,0,0,.2); }
+
+/* ── Filtros ────────────────────────────────────────────────── */
+.filtros-bar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: .75rem 0;
+}
+.filtros-bar .form-select,
+.filtros-bar .form-control { border-radius: var(--radius); min-height: 42px; }
+
+/* ── Cards de animais ───────────────────────────────────────── */
+.card-animal {
+    background: var(--cinza-card);
+    border: none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: transform .2s, box-shadow .2s;
+    height: 100%;
+    overflow: hidden;
+}
+.card-animal:hover, .card-animal:focus-within {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
+}
+.card-animal .card-img-top {
+    height: 190px;
+    object-fit: cover;
+    width: 100%;
+}
+.card-animal .card-img-placeholder {
+    height: 190px;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+}
+.badge-especie {
+    position: absolute;
+    top: .6rem;
+    left: .6rem;
+    background: var(--laranja);
+    color: #fff;
+    padding: .2rem .6rem;
+    border-radius: 2rem;
+    font-size: .78rem;
+    font-weight: 700;
+}
+.card-link-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+.card-animal .btn { position: relative; z-index: 2; }
+
+/* ── Carrossel ──────────────────────────────────────────────── */
+.carousel-animal .carousel-item img {
+    height: 340px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    width: 100%;
+}
+@media (max-width: 576px) {
+    .carousel-animal .carousel-item img { height: 220px; }
+}
+
+/* ── Detalhe animal ─────────────────────────────────────────── */
+.detalhe-box {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+.info-item { display: flex; gap: .5rem; margin-bottom: .6rem; align-items: flex-start; }
+.info-item i { color: var(--laranja); min-width: 18px; margin-top: 3px; }
+
+/* ── Formulários ────────────────────────────────────────────── */
+.form-box {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    box-shadow: var(--shadow);
+}
+.form-label { font-weight: 600; }
+.form-control, .form-select {
+    border-radius: var(--radius);
+    min-height: 42px;
+    border: 1.5px solid #ced4da;
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--laranja);
+    box-shadow: 0 0 0 3px rgba(242,139,0,.18);
+}
+
+/* ── Foto preview ───────────────────────────────────────────── */
+.foto-preview {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 2px solid #ddd;
+}
+.foto-remove-btn {
+    position: absolute;
+    top: .25rem; right: .25rem;
+    background: rgba(220,53,69,.9);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    font-size: .7rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Paginação ──────────────────────────────────────────────── */
+.paginacao .page-link {
+    color: var(--laranja);
+    min-width: 42px; min-height: 42px;
+    display: flex; align-items: center; justify-content: center;
+}
+.paginacao .page-item.active .page-link {
+    background: var(--laranja);
+    border-color: var(--laranja);
+    color: #fff;
+}
+
+/* ── CTA missão ─────────────────────────────────────────────── */
+.cta-section {
+    background: linear-gradient(to right, #c13a00 0%, #d94f00 30%, #e86000 60%, #f28b00 85%, #f5a030 100%);
+    color: #fff;
+    padding: 2.5rem 0;
+    text-align: center;
+}
+.cta-section h2 { font-weight: 800; }
+.cta-section .btn {
+    background: #fff;
+    color: var(--laranja) !important;
+    border-radius: 2rem;
+    padding: .5rem 1.8rem;
+    font-weight: 700;
+    min-height: 44px;
+}
+.cta-section .btn:hover { background: var(--escuro); color: #fff !important; }
+
+/* ── Confirmação ────────────────────────────────────────────── */
+.confirmacao-box {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.cafofe-footer {
+    background: var(--escuro);
+    color: #bbb;
+    padding: 2rem 0 1rem;
+    margin-top: 3rem;
+}
+.footer-title { color: var(--laranja); font-weight: 700; margin-bottom: .5rem; font-size: .95rem; }
+.footer-links { list-style: none; padding: 0; }
+.footer-links li { margin-bottom: .3rem; }
+.footer-links a { color: #bbb; text-decoration: none; font-size: .9rem; }
+.footer-links a:hover, .footer-links a:focus { color: var(--laranja); }
+.footer-copy { font-size: .8rem; color: #666; text-align: center; margin-top: .75rem; }
+.footer-divider { border-color: rgba(255,255,255,.1); margin: 1rem 0 .5rem; }
+
+/* ── Social links ───────────────────────────────────────────── */
+.social-link {
+    color: #bbb;
+    text-decoration: none;
+    padding: .25rem .4rem;
+    min-width: 44px; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: color .15s;
+}
+.social-link:hover, .social-link:focus { color: var(--laranja); }
+
+/* ── Erros ──────────────────────────────────────────────────── */
+.erro-page { text-align: center; padding: 4rem 1rem; }
+.erro-page .codigo {
+    font-size: clamp(5rem, 15vw, 9rem);
+    font-weight: 900;
+    color: var(--laranja);
+    line-height: 1;
+}
+
+/* ── Utilitários ────────────────────────────────────────────── */
+.text-cafofe { color: var(--laranja) !important; }
+.section-title {
+    font-weight: 800;
+    padding-bottom: .4rem;
+    border-bottom: 3px solid var(--laranja);
+    display: inline-block;
+    margin-bottom: 1.25rem;
+}
