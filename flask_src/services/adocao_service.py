@@ -36,7 +36,7 @@ class AdocaoService:
                 cpf=cpf_limpo,
                 telefone=form["telefone"],
                 rg=form.get("rg") or None,
-                cep=form.get("cep") or None,
+                cep=form.get("cep", "").replace("-", "").strip() or None,
                 endereco=form.get("endereco") or None,
                 numero=form.get("numero") or None,
                 complemento=form.get("complemento") or None,
