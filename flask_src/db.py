@@ -1,4 +1,5 @@
 import os
+import tempfile
 from pathlib import Path
 import mysql.connector
 from dotenv import load_dotenv
@@ -6,11 +7,37 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def _get_ssl_path():
+    """
+    Retorna o caminho do certificado SSL.
+    Prioridade:
+    1. Variável CA_CERT_CONTENT (Render) — cria arquivo temporário
+    2. Arquivo ca.pem local (desenvolvimento)
+    """
+    # Render: conteúdo do certificado como variável de ambiente
+    ca_content = os.getenv("CA_CERT_CONTENT")
+    if ca_content:
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".pem", delete=False
+        )
+        tmp.write(ca_content)
+        tmp.close()
+        return tmp.name
+
+    # Local: arquivo ca.pem na mesma pasta
+    ssl_ca = os.getenv("SSL_CA")
+    if ssl_ca:
+        ssl_path = Path(__file__).parent / ssl_ca
+        if ssl_path.exists():
+            return str(ssl_path)
+
+    return None
+
+
 def conectar():
     """Abre e retorna uma conexão com o banco MySQL (Aiven)."""
     try:
-        ssl_ca = os.getenv("SSL_CA")
-        ssl_path = str(Path(__file__).parent / ssl_ca) if ssl_ca else None
+        ssl_path = _get_ssl_path()
 
         params = dict(
             host=os.getenv("DB_HOST"),
