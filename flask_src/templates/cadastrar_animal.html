@@ -145,25 +145,27 @@
             </div>
         </div>
 
-        <!-- Fotos -->
+                <!-- Fotos -->
         <div class="form-section mb-4">
             <h2 class="h5 mb-1 fw-bold">
                 <i class="fa-solid fa-camera text-cafofe" aria-hidden="true"></i>
                 Fotos (até 3)
             </h2>
-            <p class="text-muted small mb-3">
-                Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 8 MB cada.
-            </p>
 
-            <label for="fotos_animal" class="form-label visually-hidden">
-                Selecionar fotos do animal
+            <label for="fotos_animal"
+                   class="d-block border border-2 border-dashed rounded-3 text-center p-4 mb-2"
+                   style="cursor:pointer; border-color:#ccc !important;"
+                   aria-describedby="fotos-hint">
+                <i class="fa-solid fa-camera fa-2x text-cafofe mb-2 d-block" aria-hidden="true"></i>
+                <span class="fw-semibold">Clique para adicionar fotos</span><br>
+                <small class="text-muted">JPG, PNG ou GIF · até 3 fotos · máx. 8 MB cada</small>
             </label>
-            <input class="form-control" type="file"
+            <input class="visually-hidden" type="file"
                    id="fotos_animal" name="fotos_animal"
                    multiple accept="image/*"
                    aria-describedby="fotos-hint">
-            <div id="fotos-hint" class="form-text">
-                Selecione até 3 fotos. A primeira será a foto principal no catálogo.
+            <div id="fotos-hint" class="form-text mb-2">
+                A primeira foto será a principal no catálogo.
             </div>
 
             <!-- Preview das fotos selecionadas -->
