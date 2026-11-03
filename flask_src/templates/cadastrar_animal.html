@@ -83,14 +83,25 @@
                     <label for="idade_aproximada" class="form-label">
                         Idade aproximada
                     </label>
-                    <div class="input-group">
-                        <input type="number" id="idade_aproximada"
-                               name="idade_aproximada"
-                               class="form-control"
-                               min="0" max="300"
-                               placeholder="Ex: 6"
-                               aria-describedby="idade-hint">
-                        <span class="input-group-text">meses</span>
+                           <input type="number" id="idade_aproximada"
+                           name="idade_aproximada"
+                           class="form-control"
+                           min="0" max="300"
+                           placeholder="Ex: 6"
+                           aria-describedby="idade-hint">
+                    <div class="d-flex gap-3 mt-1" role="group" aria-label="Unidade da idade">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                   name="idade_unidade" id="unidade_meses"
+                                   value="meses" checked>
+                            <label class="form-check-label" for="unidade_meses">meses</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                   name="idade_unidade" id="unidade_anos"
+                                   value="anos">
+                            <label class="form-check-label" for="unidade_anos">anos</label>
+                        </div>
                     </div>
                     <div id="idade-hint" class="form-text">Deixe em branco se desconhecida.</div>
                 </div>

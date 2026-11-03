@@ -59,8 +59,11 @@ class AnimalService:
                 id_especie=id_especie,
                 id_porte=id_porte,
                 sexo=form.get("sexo", "Não informado"),
-                idade_aproximada=int(form["idade_aproximada"])
-                    if form.get("idade_aproximada") else None,
+                idade_aproximada=(
+                    int(form["idade_aproximada"]) * 12
+                    if form.get("idade_unidade") == "anos"
+                    else int(form["idade_aproximada"])
+                ) if form.get("idade_aproximada") else None,
                 codigo_chip=form.get("codigo_chip") or None,
                 temperamento=form.get("temperamento") or None,
                 descricao=form.get("descricao") or None,
@@ -89,8 +92,11 @@ class AnimalService:
                 id_porte=id_porte,
                 status=form.get("status", "Para adoção"),
                 sexo=form.get("sexo", "Não informado"),
-                idade_aproximada=int(form["idade_aproximada"])
-                    if form.get("idade_aproximada") else None,
+                idade_aproximada=(
+                    int(form["idade_aproximada"]) * 12
+                    if form.get("idade_unidade") == "anos"
+                    else int(form["idade_aproximada"])
+                ) if form.get("idade_aproximada") else None,
                 codigo_chip=form.get("codigo_chip") or None,
                 temperamento=form.get("temperamento") or None,
                 descricao=form.get("descricao") or None,
