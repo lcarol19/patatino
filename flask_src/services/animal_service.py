@@ -81,14 +81,13 @@ class AnimalService:
         with AnimalRepository() as repo:
             id_especie = repo.buscar_id_especie(form["especie"])
             id_porte   = repo.buscar_id_porte(form["porte"])
-            id_status  = repo.buscar_id_status(form["status"])
 
             animal = Animal(
                 id_animal=id_animal,
                 nome=form["nome"].strip(),
                 id_especie=id_especie,
                 id_porte=id_porte,
-                id_status=id_status,
+                status=form.get("status", "Para adoção"),
                 sexo=form.get("sexo", "Não informado"),
                 idade_aproximada=int(form["idade_aproximada"])
                     if form.get("idade_aproximada") else None,

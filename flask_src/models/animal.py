@@ -25,7 +25,7 @@ class Animal:
     nome: str
     id_especie: int
     id_porte: int
-    id_status: int = 1          # 1 = Para adoção (padrão)
+    status: str = "Para adoção"
     sexo: str = "Não informado"
     idade_aproximada: Optional[int] = None   # em meses
     codigo_chip: Optional[str] = None
@@ -38,7 +38,6 @@ class Animal:
     # campos enriquecidos (JOIN) — não vêm do INSERT
     especie: Optional[str] = None
     porte: Optional[str] = None
-    status: Optional[str] = None
     fotos: List[FotoAnimal] = field(default_factory=list)
 
     @property
@@ -67,7 +66,7 @@ class Animal:
             nome=dados.get("nome", ""),
             id_especie=dados.get("id_especie", 0),
             id_porte=dados.get("id_porte", 0),
-            id_status=dados.get("id_status", 1),
+            status=dados.get("status", "Para adoção"),
             sexo=dados.get("sexo", "Não informado"),
             idade_aproximada=dados.get("idade_aproximada"),
             codigo_chip=dados.get("codigo_chip"),
@@ -78,5 +77,4 @@ class Animal:
             data_atualizacao=dados.get("data_atualizacao"),
             especie=dados.get("especie"),
             porte=dados.get("porte"),
-            status=dados.get("status"),
         )

@@ -8,19 +8,19 @@ from models.adocao import Adocao
 
 class AdocaoRepository(BaseRepository):
 
+    
     def buscar_por_id(self, id_adocao: int) -> Optional[Adocao]:
         self._cursor.execute(
             """
             SELECT ad.*,
-                   sa.descricao  AS status,
-                   a.nome        AS nome_animal,
-                   e.descricao   AS especie,
-                   t.nome        AS nome_tutor
+                ad.status AS status,
+                a.nome AS nome_animal,
+                e.descricao AS especie,
+                t.nome AS nome_tutor
             FROM adocoes ad
-            JOIN status_adocao sa ON sa.id_status  = ad.id_status
-            JOIN animais       a  ON a.id_animal   = ad.id_animal
-            JOIN especies      e  ON e.id_especie  = a.id_especie
-            JOIN tutores       t  ON t.id_tutor    = ad.id_tutor
+            JOIN animais a ON a.id_animal = ad.id_animal
+            JOIN especies e ON e.id_especie = a.id_especie
+            JOIN tutores t ON t.id_tutor = ad.id_tutor
             WHERE ad.id_adocao = %s
             """,
             (id_adocao,),
@@ -32,10 +32,10 @@ class AdocaoRepository(BaseRepository):
         """Insere uma nova adoção e retorna o id gerado."""
         self._cursor.execute(
             """
-            INSERT INTO adocoes (id_animal, id_tutor, id_status)
+            INSERT INTO adocoes (id_animal, id_tutor, status)
             VALUES (%s, %s, %s)
             """,
-            (adocao.id_animal, adocao.id_tutor, adocao.id_status),
+            (adocao.id_animal, adocao.id_tutor, adocao.status),
         )
         return self._cursor.lastrowid
 

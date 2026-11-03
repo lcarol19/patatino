@@ -22,7 +22,7 @@ class AnimalRepository(BaseRepository):
     ) -> Tuple[List[Animal], int]:
         """Retorna (lista de animais, total) para a página do catálogo."""
 
-        filtros = ["a.id_status = 1"]
+        filtros = ["a.status = 'Para adoção'"]
         params: list = []
 
         if especie:
@@ -44,9 +44,9 @@ class AnimalRepository(BaseRepository):
         where = " AND ".join(filtros)
 
         self._cursor.execute(
-            f"SELECT COUNT(*) AS total FROM animais a "
-            f"JOIN especies e ON e.id_especie = a.id_especie "
-            f"JOIN portes   p ON p.id_porte   = a.id_porte "
+            f"SELECT COUNT(*) AS total FROM animais AS a "
+            f"JOIN especies AS e ON e.id_especie = a.id_especie "
+            f"JOIN portes  AS p ON p.id_porte   = a.id_porte "
             f"WHERE {where}",
             params,
         )
@@ -93,11 +93,10 @@ class AnimalRepository(BaseRepository):
             """
             SELECT a.*, e.descricao AS especie,
                    p.descricao AS porte,
-                   s.descricao AS status
+                   a.status AS status
             FROM animais a
             JOIN especies      e ON e.id_especie = a.id_especie
             JOIN portes        p ON p.id_porte   = a.id_porte
-            JOIN status_animal s ON s.id_status  = a.id_status
             WHERE a.id_animal = %s
             """,
             (id_animal,),
@@ -156,14 +155,14 @@ class AnimalRepository(BaseRepository):
         self._cursor.execute(
             """
             INSERT INTO animais
-                (nome, id_especie, id_porte, id_status, sexo,
+                (nome, id_especie, id_porte, status, sexo,
                  idade_aproximada, codigo_chip, temperamento,
                  descricao, observacoes)
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
             """,
             (
                 animal.nome, animal.id_especie, animal.id_porte,
-                animal.id_status, animal.sexo, animal.idade_aproximada,
+                animal.status, animal.sexo, animal.idade_aproximada,
                 animal.codigo_chip, animal.temperamento,
                 animal.descricao, animal.observacoes,
             ),
@@ -174,14 +173,14 @@ class AnimalRepository(BaseRepository):
         self._cursor.execute(
             """
             UPDATE animais SET
-                nome=%s, id_especie=%s, id_porte=%s, id_status=%s,
+                nome=%s, id_especie=%s, id_porte=%s, status=%s,
                 sexo=%s, idade_aproximada=%s, codigo_chip=%s,
                 temperamento=%s, descricao=%s, observacoes=%s
             WHERE id_animal=%s
             """,
             (
                 animal.nome, animal.id_especie, animal.id_porte,
-                animal.id_status, animal.sexo, animal.idade_aproximada,
+                animal.status, animal.sexo, animal.idade_aproximada,
                 animal.codigo_chip, animal.temperamento,
                 animal.descricao, animal.observacoes,
                 animal.id_animal,
@@ -197,10 +196,10 @@ class AnimalRepository(BaseRepository):
         self._cursor.execute(
             """
             INSERT INTO fotos_animais
-                (id_animal, url_foto, id_cloudinary, ordem)
-            VALUES (%s,%s,%s,%s)
+                (id_animal, caminho_foto, url_foto, id_cloudinary, ordem)
+            VALUES (%s,%s,%s,%s,%s)
             """,
-            (foto.id_animal, foto.url_foto, foto.id_cloudinary, foto.ordem),
+            (foto.id_animal, foto.url_foto, foto.url_foto, foto.id_cloudinary, foto.ordem),
         )
         return self._cursor.lastrowid
 
@@ -222,9 +221,3 @@ class AnimalRepository(BaseRepository):
             "SELECT id_porte FROM portes WHERE descricao=%s", (descricao,)
         )
         return self._cursor.fetchone()["id_porte"]
-
-    def buscar_id_status(self, descricao: str) -> int:
-        self._cursor.execute(
-            "SELECT id_status FROM status_animal WHERE descricao=%s", (descricao,)
-        )
-        return self._cursor.fetchone()["id_status"]

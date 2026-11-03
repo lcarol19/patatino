@@ -71,27 +71,62 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'animal.home' %}active{% endif %}"
-                           href="{{ url_for('animal.home') }}"
-                           {% if request.endpoint == 'animal.home' %}aria-current="page"{% endif %}>
+                        href="{{ url_for('animal.home') }}">
                             Início
                         </a>
                     </li>
+
+                    {% if session.get('admin_autorizado') %}
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'animal.cadastrar' %}active{% endif %}"
-                           href="{{ url_for('animal.cadastrar') }}"
-                           {% if request.endpoint == 'animal.cadastrar' %}aria-current="page"{% endif %}>
+                        <a class="nav-link" href="{{ url_for('animal.cadastrar') }}">
                             Cadastrar Animal
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://www.cafofe.org" target="_blank" rel="noopener">
-                            Site Cafofe <i class="fa-solid fa-arrow-up-right-from-square fa-xs" aria-hidden="true"></i>
+                        <a class="nav-link" href="{{ url_for('animal.admin_sair') }}">
+                            Sair
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('animal.admin_acesso') }}">
+                            Área do administrador
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.cafofe.org"
+                        target="_blank" rel="noopener">
+                            Site Cafofe
+                            <i class="fa-solid fa-arrow-up-right-from-square fa-xs"
+                            aria-hidden="true"></i>
                         </a>
                     </li>
                 </ul>
+
+                <!-- Controles de acessibilidade -->
+                <div class="d-flex align-items-center gap-2 ms-lg-3 mb-2 mb-lg-0"
+                    aria-label="Controles de tamanho da fonte">
+
+                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                            id="diminuirFonte" aria-label="Diminuir fonte">
+                        A−
+                    </button>
+
+                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                            id="fonteNormal" aria-label="Restaurar fonte normal">
+                        A
+                    </button>
+
+                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                            id="aumentarFonte" aria-label="Aumentar fonte">
+                        A+
+                    </button>
+                </div>
             </div>
-        </div>
-    </nav>
+            </div>
+            </nav>
 
     <!-- Mensagens flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -128,7 +163,7 @@
                     <p class="footer-title">Links</p>
                     <ul class="footer-links">
                         <li><a href="{{ url_for('animal.home') }}">Adotar um animal</a></li>
-                        <li><a href="{{ url_for('animal.cadastrar') }}">Cadastrar animal</a></li>
+                        <li><a href="{{ url_for('animal.admin_acesso') }}">Cadastrar animal</a></li>
                         <li><a href="https://www.cafofe.org/ajudar.html" target="_blank" rel="noopener">Como ajudar</a></li>
                     </ul>
                 </div>
@@ -173,6 +208,47 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Acessibilidade: controle do tamanho da fonte
+        const corpo = document.body;
+        const botaoAumentar = document.getElementById('aumentarFonte');
+        const botaoDiminuir = document.getElementById('diminuirFonte');
+        const botaoNormal = document.getElementById('fonteNormal');
+
+        const tamanhoPadrao = 16;
+        const tamanhoMinimo = 12;
+        const tamanhoMaximo = 24;
+
+        let tamanhoAtual = Number(localStorage.getItem('tamanhoFonte')) || tamanhoPadrao;
+
+        function aplicarFonte() {
+            corpo.style.fontSize = tamanhoAtual + 'px';
+            localStorage.setItem('tamanhoFonte', tamanhoAtual);
+        }
+
+        botaoAumentar.addEventListener('click', function () {
+            if (tamanhoAtual < tamanhoMaximo) {
+                tamanhoAtual += 2;
+                aplicarFonte();
+            }
+        });
+
+        botaoDiminuir.addEventListener('click', function () {
+            if (tamanhoAtual > tamanhoMinimo) {
+                tamanhoAtual -= 2;
+                aplicarFonte();
+            }
+        });
+
+        botaoNormal.addEventListener('click', function () {
+            tamanhoAtual = tamanhoPadrao;
+            aplicarFonte();
+        });
+
+        aplicarFonte();
+    </script>
+
     {% block extra_js %}{% endblock %}
-</body>
-</html>
+    </body>
+    </html>

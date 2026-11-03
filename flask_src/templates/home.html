@@ -119,7 +119,10 @@
                         <span class="small text-success fw-semibold">
                             <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Disponível
                         </span>
-                        <span class="btn btn-cafofe btn-sm py-1" aria-hidden="true">Ver</span>
+                        <a href="{{ url_for('animal.detalhe', id_animal=animal.id_animal) }}"
+                            class="btn btn-cafofe btn-sm py-1">
+                            Ver
+                        </a>
                     </div>
                 </article>
             </div>

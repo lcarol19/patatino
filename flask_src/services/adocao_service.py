@@ -61,7 +61,7 @@ class AdocaoService:
                 id_adocao=None,
                 id_animal=id_animal,
                 id_tutor=id_tutor,
-                id_status=1,  # Em análise
+                status="Em análise",
             )
             id_adocao = adocao_repo.inserir(adocao)
 
@@ -92,7 +92,7 @@ class AdocaoService:
     def _validar_animal_disponivel(self, id_animal: int) -> None:
         with AnimalRepository() as repo:
             animal = repo.buscar_por_id(id_animal)
-        if not animal or animal.id_status != 1:
+        if not animal or animal.status != "Para adoção":
             raise ValueError("Animal não disponível para adoção.")
 
     def _validar_form_tutor(self, form: dict) -> None:

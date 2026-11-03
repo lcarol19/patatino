@@ -6,6 +6,8 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.getenv("APP_SECRET_KEY", "patatino-dev-secret")
+    SENHA_ADMIN = os.getenv("SENHA_ADMIN")
+    PERMANENCIA_ADMIN = 3600
     MAX_FOTOS_ANIMAL = 3
     ESPECIES = ["Cachorro", "Gato", "Outro"]
     PORTES = ["Pequeno", "Médio", "Grande"]

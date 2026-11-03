@@ -124,6 +124,7 @@ class PDFService:
             ['Telefone',        tutor.telefone],
             ['E-mail',          tutor.email    or '—'],
             ['Endereço',        tutor.endereco_completo or '—'],
+            ['CEP',             tutor.cep or '—'],
             ['Tipo de moradia', tutor.tipo_moradia or '—'],
             ['Horas fora/dia',  str(tutor.horas_fora_casa) + 'h' if tutor.horas_fora_casa else '—'],
             ['Autoriza visitas', tutor.autoriza_visita_ong],

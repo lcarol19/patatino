@@ -33,7 +33,7 @@ class Adocao:
     id_adocao: Optional[int]
     id_animal: int
     id_tutor: int
-    id_status: int = 1              # 1 = Em análise
+    status: str = "Em análise"
     data_interesse: Optional[datetime] = None
     data_solicitacao: Optional[datetime] = None
     data_adocao: Optional[datetime] = None
@@ -41,7 +41,6 @@ class Adocao:
     observacoes: Optional[str] = None
 
     # campos enriquecidos (JOIN)
-    status: Optional[str] = None
     nome_animal: Optional[str] = None
     nome_tutor: Optional[str] = None
     especie: Optional[str] = None
@@ -53,13 +52,12 @@ class Adocao:
             id_adocao=dados.get("id_adocao"),
             id_animal=dados.get("id_animal", 0),
             id_tutor=dados.get("id_tutor", 0),
-            id_status=dados.get("id_status", 1),
+            status=dados.get("status", "Em análise"),
             data_interesse=dados.get("data_interesse"),
             data_solicitacao=dados.get("data_solicitacao"),
             data_adocao=dados.get("data_adocao"),
             termo_gerado=bool(dados.get("termo_gerado", False)),
             observacoes=dados.get("observacoes"),
-            status=dados.get("status"),
             nome_animal=dados.get("nome_animal"),
             nome_tutor=dados.get("nome_tutor"),
             especie=dados.get("especie"),
