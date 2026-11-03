@@ -160,10 +160,11 @@
                 <span class="fw-semibold">Clique para adicionar fotos</span><br>
                 <small class="text-muted">JPG, PNG ou GIF · até 3 fotos · máx. 8 MB cada</small>
             </label>
-                   <input class="visually-hidden" type="file" style="position:absolute"
+                   <input type="file"
                    id="fotos_animal" name="fotos_animal"
                    multiple accept="image/*"
-                   aria-describedby="fotos-hint">
+                   aria-describedby="fotos-hint"
+                   style="opacity:0; position:absolute; width:1px; height:1px;">
             <div id="fotos-hint" class="form-text mb-2">
                 A primeira foto será a principal no catálogo.
             </div>
